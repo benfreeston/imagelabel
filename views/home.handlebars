@@ -1,0 +1,8 @@
+<script>
+	$(document).keypress(function(e) {
+	  	window.location.href = "/?count={{count}}&set="+String.fromCharCode(e.which);
+	});
+</script>
+{{error}}
+<img style='width: 100%' src='{{img}}'>
+Processing image: {{count}} of {{size}}

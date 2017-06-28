@@ -1,0 +1,21 @@
+{
+  "name": "imagelabel",
+  "version": "1.0.0",
+  "description": "Manually label images as a ML classification train / test set",
+  "main": "main.js",
+  "dependencies": {
+    "aws-sdk": "^2.77.0",
+    "config": "^1.26.1",
+    "csv-to-array": "^1.0.2",
+    "express": "^4.15.3",
+    "express-handlebars": "^3.0.0",
+    "handlebars": "^4.0.10",
+    "mustache": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ben Freeston",
+  "license": "ISC"
+}
