@@ -13,7 +13,94 @@ with documentation (Note. node-config allows for comments in JSON but github hat
 
 **main.js** will create a lightweight server that'll allow users to pull images from a list (defined in **images.csv** see config) and classify (into classes defined in config) them writing the image and class to **data.csv**.
 
-**s3.js** is convenience utility to scan an S3 bucket and create **images.csv** from matching images. See config for details.
+**s3.js** is convenience utility to scan an S3 bucket and create **images.csv** from matching images. See config for details:
+
+    {
+        /*
+
+            DEFAULT CONFIG
+
+            All our run time configuration is defined here. This is a boilerplate and 
+            needs modifying for your local environment before running. 
+
+         ------------------------------------------------------------------------------------
+
+            MAIN
+
+            The main server will deliver your images for classification. 
+         */
+        "main" : {
+
+            /* Root web domain. All images are served via the browser via http and
+               this defines that web root (nb. needs trailing /). Boilerplate is for an 
+               AWS bucket but it'll work with any domain.
+             */
+            "root" : "http://YOURBUCKET.s3.amazonaws.com/",
+
+            /* Images CSV. This defines a local path to a CSV with a single column
+               of remote image paths such that root + image_path is a full web route
+               to your image.
+
+               This image CSV can be created however you like, eg:
+
+                    ls *.jpg > images.csv
+
+               Or can be created by s3.js from an S3 bucket.  
+             */
+             "imagescsv": "images.csv",
+
+             /* Data CSV. This is our local output from the classification process in the form
+                of rows of 'local_image_path,classification_set'. This file will be created by main.js
+                at runtime if it doesn't already exist.
+              */
+             "datacsv": "data.csv",
+
+             /* Classes (or categories). Define a key and matching label here. Pressing this key will append the 
+                KEYNAME to the data CSV. The labels are only for comprehension here, they're not used in the 
+                data created.
+
+                NB. I've found it useful to add a 'bad data' category that can be used as a skip if an image is malformed or 
+                unidentifiable. These can be easily filtered from your data.csv later.
+              */
+             "classes" : {"0": "car",
+                          "1": "cat",
+                          "2": "dog",
+                          "3": "boat",
+                          "b": "baddata"}
+        },
+
+        /*
+         -------------------------------------------------------------------------------------
+
+            S3 AUTOMATION
+
+            s3.js will automatically create the images csv given the details of a remote publicly accessible bucket.
+
+            Boilerplate example will scan images that match:
+
+                http://MYBUCKET.s3.amazonaws.com/MYFOLDER/*.jpg
+
+         */
+         "s3" : {
+
+            /* Name of the S3 bucket to scan */
+            "bucket" : "MYBUCKET",
+
+            /* Prefix for the files within your bucket. Technically S3 doesn't support 'folders' but 
+               it's pretty standard practise to split out your files with prefixes that look a lot like them, this 
+               allows you to pick only images that use a particular prefix
+             */
+            "prefix" : "/MYFOLDER/",
+
+            /* Wildcard string - only includes images in the given bucket with the given prefix that also contain this 
+               wildcard. Useful for picking images from a structure with mixed assets (eg. '.jpg'). NB. there's no 
+               support for excluding on this string or regular expressions. Hack s3.js for that.
+
+               N.B. Leave empty string if not required
+             */
+            "wildcard" : ".jpg"
+         }
+    }
 
 ### Known Issues
 
